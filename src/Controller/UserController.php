@@ -25,6 +25,7 @@ class UserController extends AbstractFOSRestController
     }
 
     /**
+     * Dado un username y password, si son válidos, retorna un token JWT.
      * @Rest\Post("/login")
      * @Rest\RequestParam(name="username", description="Nombre de usuario", strict=true, nullable=false)
      * @Rest\RequestParam(name="password", description="Contraseña", strict=true, nullable=false)
@@ -61,16 +62,17 @@ class UserController extends AbstractFOSRestController
     }
 
     /**
-      * @Rest\Post("/user")
-      * @Rest\RequestParam(name="username", description="Nombre de usuario", strict=true, nullable=false)
-      * @Rest\RequestParam(name="password", description="Contraseña del usuario", strict=true, nullable=false)
-      * @Rest\RequestParam(name="_password", description="Verificación de contraseña", strict=true, nullable=false)
-      * @Rest\RequestParam(name="firstName", description="Nombre", strict=true, nullable=false)
-      * @Rest\RequestParam(name="lastName", description="Apellido", strict=true, nullable=false)
-      *
-      * @param ParamFetcherInterface $paramFetcher
-      * @return void
-      */
+     * Da de alta un Usuario.
+     * @Rest\Post("/user")
+     * @Rest\RequestParam(name="username", description="Nombre de usuario", strict=true, nullable=false)
+     * @Rest\RequestParam(name="password", description="Contraseña del usuario", strict=true, nullable=false)
+     * @Rest\RequestParam(name="_password", description="Verificación de contraseña", strict=true, nullable=false)
+     * @Rest\RequestParam(name="firstName", description="Nombre", strict=true, nullable=false)
+     * @Rest\RequestParam(name="lastName", description="Apellido", strict=true, nullable=false)
+     *
+     * @param ParamFetcherInterface $paramFetcher
+     * @return void
+     */
     public function createUser(ParamFetcherInterface $paramFetcher)
     {
         if ($paramFetcher->get('password') != $paramFetcher->get('_password')) {
@@ -93,14 +95,15 @@ class UserController extends AbstractFOSRestController
     }
 
     /**
-      * @Rest\Put("/user/{user}", requirements={"user"="\d+"})
-      * @Rest\RequestParam(name="username", description="Nombre de usuario", strict=true, nullable=true)
-      * @Rest\RequestParam(name="firstName", description="Nombre", strict=true, nullable=true)
-      * @Rest\RequestParam(name="lastName", description="Apellido", strict=true, nullable=true)
-      *
-      * @param ParamFetcherInterface $paramFetcher
-      * @return void
-      */
+     * Actualiza los datos del Usuario indicado por parámetro.
+     * @Rest\Put("/user/{user}", requirements={"user"="\d+"})
+     * @Rest\RequestParam(name="username", description="Nombre de usuario", strict=true, nullable=true)
+     * @Rest\RequestParam(name="firstName", description="Nombre", strict=true, nullable=true)
+     * @Rest\RequestParam(name="lastName", description="Apellido", strict=true, nullable=true)
+     *
+     * @param ParamFetcherInterface $paramFetcher
+     * @return void
+     */
     public function updateUser(ParamFetcherInterface $paramFetcher, User $user)
     {
         try {
@@ -122,6 +125,7 @@ class UserController extends AbstractFOSRestController
     }
 
     /**
+     * Elimina el Usuario indicado por parámetro.
      * @Rest\Delete("/user/{user}", requirements={"user"="\d+"})
      * @return void
      */
@@ -134,13 +138,14 @@ class UserController extends AbstractFOSRestController
     }
 
     /**
-      * @Rest\Put("/user/{user}/changePassword")
-      * @Rest\RequestParam(name="password", description="Contraseña del usuario", strict=true, nullable=false)
-      * @Rest\RequestParam(name="_password", description="Verificación de contraseña", strict=true, nullable=false)
-      *
-      * @param ParamFetcherInterface $paramFetcher
-      * @return void
-      */
+     * Cambia la contraseña del Usuario indicado por parámetro.
+     * @Rest\Put("/user/{user}/changePassword")
+     * @Rest\RequestParam(name="password", description="Contraseña del usuario", strict=true, nullable=false)
+     * @Rest\RequestParam(name="_password", description="Verificación de contraseña", strict=true, nullable=false)
+     *
+     * @param ParamFetcherInterface $paramFetcher
+     * @return void
+     */
     public function changePasswordUser(ParamFetcherInterface $paramFetcher, User $user)
     {
         if ($paramFetcher->get('password') != $paramFetcher->get('_password')) {
@@ -154,11 +159,12 @@ class UserController extends AbstractFOSRestController
     }
 
     /**
-      * @Rest\Post("/user/{user}/role/{role}", requirements={"user"="\d+"})
-      *
-      * @param ParamFetcherInterface $paramFetcher
-      * @return void
-      */
+     * Asocia un Rol a un Usuario.
+     * @Rest\Post("/user/{user}/role/{role}", requirements={"user"="\d+"})
+     *
+     * @param ParamFetcherInterface $paramFetcher
+     * @return void
+     */
     public function addRoleToUser(User $user, Role $role)
     {
         $user->addRole($role);

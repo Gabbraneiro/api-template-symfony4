@@ -19,13 +19,14 @@ use App\Entity\Action;
 class ActionController extends AbstractFOSRestController
 {
     /**
-      * @Rest\Post("")
-      * @Rest\RequestParam(name="code", description="Código de la acción", strict=true, nullable=false)
-      * @Rest\RequestParam(name="name", description="Nombre de la acción", strict=true, nullable=false)
-      *
-      * @param ParamFetcherInterface $paramFetcher
-      * @return void
-      */
+     * Da de alta una Acción.
+     * @Rest\Post("")
+     * @Rest\RequestParam(name="code", description="Código de la acción", strict=true, nullable=false)
+     * @Rest\RequestParam(name="name", description="Nombre de la acción", strict=true, nullable=false)
+     *
+     * @param ParamFetcherInterface $paramFetcher
+     * @return void
+     */
     public function createAction(ParamFetcherInterface $paramFetcher)
     {
         try {
@@ -42,6 +43,20 @@ class ActionController extends AbstractFOSRestController
     }
 
     /**
+     * Elimina la Acción indicada por parámetro.
+     * @Rest\Delete("/{action}", requirements={"action"="\d+"})
+     * @return void
+     */
+    public function deleteAction(Action $action)
+    {
+        $this->getDoctrine()->getManager()->remove($action);
+        $this->getDoctrine()->getManager()->flush();
+        $response = ['mensaje' => "Se eliminó la acción {$action->getName()}"];
+        return $this->handleView($this->view($response));
+    }
+
+    /**
+     * Lista todas las Acciones.
      * @Rest\Get("")
      * @return void
      */
@@ -50,5 +65,4 @@ class ActionController extends AbstractFOSRestController
         $actions = $this->getDoctrine()->getRepository(Action::class)->findAll();
         return $this->handleView($this->view($actions));
     }
-
 }

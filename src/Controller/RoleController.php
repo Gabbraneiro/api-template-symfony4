@@ -19,13 +19,14 @@ use App\Entity\Action;
 class RoleController extends AbstractFOSRestController
 {
     /**
-      * @Rest\Post("")
-      * @Rest\RequestParam(name="code", description="Código del rol", strict=true, nullable=false)
-      * @Rest\RequestParam(name="name", description="Nombre del rol", strict=true, nullable=false)
-      *
-      * @param ParamFetcherInterface $paramFetcher
-      * @return void
-      */
+     * Da de alta un Rol.
+     * @Rest\Post("")
+     * @Rest\RequestParam(name="code", description="Código del rol", strict=true, nullable=false)
+     * @Rest\RequestParam(name="name", description="Nombre del rol", strict=true, nullable=false)
+     *
+     * @param ParamFetcherInterface $paramFetcher
+     * @return void
+     */
     public function createRole(ParamFetcherInterface $paramFetcher)
     {
         try {
@@ -42,6 +43,7 @@ class RoleController extends AbstractFOSRestController
     }
 
     /**
+     * Lista todos los Roles.
      * @Rest\Get("")
      * @return void
      */
@@ -52,6 +54,20 @@ class RoleController extends AbstractFOSRestController
     }
 
     /**
+     * Elimina el Rol indicado por parámetro.
+     * @Rest\Delete("/{role}", requirements={"role"="\d+"})
+     * @return void
+     */
+    public function deleteRole(Role $role)
+    {
+        $this->getDoctrine()->getManager()->remove($role);
+        $this->getDoctrine()->getManager()->flush();
+        $response = ['mensaje' => "Se eliminó el rol {$role->getName()}"];
+        return $this->handleView($this->view($response));
+    }
+
+    /**
+     * Asocia una Acción a un Rol.
      * @Rest\Post("/{role}/action/{action}", requirements={"role"="\d+", "action"="\d+"})
      * @return void
      */
